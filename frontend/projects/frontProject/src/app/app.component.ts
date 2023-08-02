@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'myproj-front';
+  title:string = 'myproj-front';
+  testNumber:number = 123;
+
+  onClick() {
+    this.testNumber = 234536475867;
+  }
 }

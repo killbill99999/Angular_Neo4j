@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "myproj-front": {
+    "frontProject": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:class": {
@@ -31,26 +31,27 @@
           "skipTests": true
         }
       },
-      "root": "projects/myproj-front",
-      "sourceRoot": "projects/myproj-front/src",
+      "root": "projects/frontProject",
+      "sourceRoot": "projects/frontProject/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/myproj-front",
-            "index": "projects/myproj-front/src/index.html",
-            "main": "projects/myproj-front/src/main.ts",
+            "outputPath": "dist/frontProject",
+            "index": "projects/frontProject/src/index.html",
+            "main": "projects/frontProject/src/main.ts",
             "polyfills": [
               "zone.js"
             ],
-            "tsConfig": "projects/myproj-front/tsconfig.app.json",
+            "tsConfig": "projects/frontProject/tsconfig.app.json",
             "assets": [
-              "projects/myproj-front/src/favicon.ico",
-              "projects/myproj-front/src/assets"
+              "projects/frontProject/src/favicon.ico",
+              "projects/frontProject/src/assets"
             ],
             "styles": [
-              "projects/myproj-front/src/styles.css"
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "projects/frontProject/src/styles.css"
             ],
             "scripts": []
           },
@@ -85,10 +86,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "myproj-front:build:production"
+              "browserTarget": "frontProject:build:production"
             },
             "development": {
-              "browserTarget": "myproj-front:build:development"
+              "browserTarget": "frontProject:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -96,7 +97,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "myproj-front:build"
+            "browserTarget": "frontProject:build"
           }
         },
         "test": {
@@ -106,13 +107,14 @@
               "zone.js",
               "zone.js/testing"
             ],
-            "tsConfig": "projects/myproj-front/tsconfig.spec.json",
+            "tsConfig": "projects/frontProject/tsconfig.spec.json",
             "assets": [
-              "projects/myproj-front/src/favicon.ico",
-              "projects/myproj-front/src/assets"
+              "projects/frontProject/src/favicon.ico",
+              "projects/frontProject/src/assets"
             ],
             "styles": [
-              "projects/myproj-front/src/styles.css"
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "projects/frontProject/src/styles.css"
             ],
             "scripts": []
           }
