@@ -6,6 +6,9 @@ import { TestComponentComponent } from '../component/test-component/test-compone
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {MatCardModule} from '@angular/material/card';
+import { StoreModule } from '@ngrx/store';
+import { counterReducer } from '../store/counter';
+import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,6 +20,8 @@ import {MatCardModule} from '@angular/material/card';
     BrowserAnimationsModule,
     MatSlideToggleModule,
     MatCardModule,
+    CommonModule,
+    StoreModule.forRoot({ count: counterReducer })
   ],
   providers: [],
   bootstrap: [AppComponent]

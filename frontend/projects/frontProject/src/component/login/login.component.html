@@ -1,0 +1,16 @@
+<div class="login-box">
+  <p>{{ title | uppercase }}</p>
+  <mat-form-field style="min-width:300px;">
+    <mat-label>Enter your account</mat-label>
+    <input matInput >
+  </mat-form-field>
+
+  <mat-form-field style="min-width:300px;">
+    <mat-label>Enter your password</mat-label>
+    <input matInput [type]="hide ? 'password' : 'text'">
+    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+
