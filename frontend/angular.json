@@ -51,8 +51,7 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
-              "projects/frontProject/src/styles.css",
-              "projects/frontProject/src/styles.scss"
+              "projects/frontProject/src/styles.css"
             ],
             "scripts": []
           },

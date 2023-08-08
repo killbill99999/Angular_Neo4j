@@ -1,5 +1,5 @@
-<div class="login-box">
-  <p>{{ title | uppercase }}</p>
+<div class="login-box pl-0">
+  <p class="py-8">{{ title | uppercase }}</p>
   <mat-form-field style="min-width:300px;">
     <mat-label>Enter your account</mat-label>
     <input matInput >
@@ -12,5 +12,8 @@
       <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
   </mat-form-field>
+  <button mat-fab extended color="primary" (click)="onClick()" style="min-width:300px;">
+    Login
+  </button>
 </div>
 
