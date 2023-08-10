@@ -1,0 +1,60 @@
+.content{
+  margin-right:60px;
+  overflow-y: scroll;
+}
+
+/* card */
+.mat-mdc-form-field + .mat-mdc-form-field {
+  margin-left: 8px;
+}
+
+::ng-deep .mat-expansion-panel-content{
+  border-top: 1px solid #b7b7b7;
+}
+
+/* autocomplete */
+.mat-expansion-panel:not([class*=mat-elevation-z]){
+  box-shadow: 0 2px 20px 0 rgba(14, 31, 53, 0.12);
+}
+
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+  padding-right:20px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+height:38px;
+align-items: center;
+border-bottom:none;
+}
+
+/* checkbox */
+.example-section {
+  margin: 12px 0;
+}
+
+
+/* button */
+.search-button{
+  width:100px;
+  height:32px;
+}
+
+/* data table */
+.data-table{
+  height:400px;
+}
+.table-container {
+  box-shadow: 0 2px 20px 0 rgba(14, 31, 53, 0.12);
+  margin-top:20px;
+  position: relative;
+  min-height: 200px;
+  max-height: 400px;
+  overflow: auto;
+}

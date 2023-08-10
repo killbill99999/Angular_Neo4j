@@ -1,0 +1,21 @@
+.tab-bar{
+  margin-right:60px;
+}
+.mat-tab-group {
+  margin-bottom: 48px;
+}
+
+::ng-deep .mat-mdc-tab-header{
+  border-radius:6px;
+  background-color:#fff;
+  color:#999;
+}
+
+::ng-deep .mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs>.mat-mdc-tab-header .mat-mdc-tab{
+  height:56px;
+}
+
+::ng-deep .mat-mdc-tab-header {
+  margin-right:60px;
+  box-shadow: 0 2px 20px 0 rgba(14, 31, 53, 0.12);
+}

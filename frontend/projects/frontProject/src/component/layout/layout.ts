@@ -29,14 +29,14 @@ interface ExampleFlatNode {
 }
 
 @Component({
-  selector: 'app-dashboard-component',
-  templateUrl: './dashboard-component.component.html',
-  styleUrls: ['./dashboard-component.component.css'],
+  selector: 'app-layout-component',
+  templateUrl: './layout.html',
+  styleUrls: ['./layout.css'],
   standalone: true,
   imports: [MatTreeModule, MatButtonModule, MatIconModule, RouterModule],
 })
 
-export class DashboardComponent {
+export class Layout {
   private _transformer = (node: FoodNode, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,

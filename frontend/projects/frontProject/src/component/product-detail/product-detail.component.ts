@@ -2,8 +2,7 @@ import {Component} from '@angular/core';
 import {NgFor} from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import {MatButtonModule} from '@angular/material/button';
-
-
+import NeoVis, { NeovisConfig, NonFlatNeovisConfig } from "neovis.js";
 
 export interface PeriodicElement {
   name: string;
@@ -63,4 +62,31 @@ export class ProductDetailComponent {
       this.columnsToDisplay[randomIndex] = temp;
     }
   }
+
+//   draw() {
+
+//     var config : NeovisConfig = {
+//       containerId: "viz",
+//       neo4j: {
+//           serverUrl: "bolt://10.20.30.34:7687",
+//           serverUser: "neo4j",
+//           serverPassword: "password"
+//       },
+//       labels: {
+//           Character: {
+//               label: "name",
+//               value: "pagerank",
+//               group: "community"
+//           }
+//       },
+//       relationships: {
+//           INTERACTS: {
+//               value: "weight"
+//           }
+//       },
+//       initialCypher: "MATCH (n1)-[r]->(n2) RETURN r, n1, n2 LIMIT 25"
+//  }
+//     var viz = new NeoVis(config);
+//     viz.render();
+// }
 }

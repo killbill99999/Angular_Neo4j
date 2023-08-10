@@ -1,5 +1,5 @@
-<div class="w-screen fixed bottom-0 flex items-end">
-  <div class="nav-bar relative bg-neutral-400 bottom-0">
+<div class="w-screen flex items-end">
+  <div class="fixed nav-bar bg-neutral-400 bottom-0">
     <div class="bg-neutral-400 top-block absolute rounded-se-3xl"></div>
     <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
       <!-- This is the tree node template for leaf nodes -->
@@ -20,7 +20,8 @@
       </mat-tree-node>
     </mat-tree>
   </div>
-  <div class="body-content">
+  <div class="body-content absolute">
     <router-outlet></router-outlet>
   </div>
 </div>
+<div id="viz" class="w-screen" style="height:400px"></div>
