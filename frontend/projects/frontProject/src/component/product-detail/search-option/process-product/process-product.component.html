@@ -16,18 +16,20 @@
                 <mat-form-field class="example-full-width">
                   <mat-label>全部</mat-label>
                   <input type="text"
+                        [(ngModel)]="searchData.newItemName"
                          placeholder="Pick one"
                          aria-label="Number"
                          matInput
                          [formControl]="myControl"
                          [matAutocomplete]="auto">
                   <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    <mat-option  *ngFor="let option of options" [value]="option">
                       {{option}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
               </form>
+              <p>{{searchData.newItemName}}dsfgfhg</p>
             </div>
             <div class="w-1/4">
               <p>商品類別</p>

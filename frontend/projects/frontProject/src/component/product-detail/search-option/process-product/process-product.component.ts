@@ -12,6 +12,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTableModule} from '@angular/material/table';
 import { CommonModule } from '@angular/common';
+import { NewItemReq } from 'projects/frontProject/src/models/new-item/new-item-req';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -62,6 +63,7 @@ export class ProcessProductComponent implements OnInit{
   myControl = new FormControl('');
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions!: Observable<string[]>;
+  searchData: NewItemReq = {};
   toppings = this._formBuilder.group({
     pepperoni: false,
     extracheese: false,
@@ -71,10 +73,12 @@ export class ProcessProductComponent implements OnInit{
   constructor(private _formBuilder: FormBuilder) {}
 
   ngOnInit() {
+    console.log(this.filteredOptions)
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
     );
+    console.log(this.filteredOptions)
   }
 
   private _filter(value: string): string[] {
