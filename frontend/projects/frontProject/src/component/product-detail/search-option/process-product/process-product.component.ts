@@ -2,7 +2,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {Component, OnInit} from '@angular/core';
 import {FormControl,FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import {map, startWith, tap} from 'rxjs/operators';
 import {NgFor, AsyncPipe} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
@@ -13,12 +13,20 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatTableModule} from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { NewItemReq } from 'projects/frontProject/src/models/new-item/new-item-req';
+import {Service} from 'projects/frontProject/src/service/index';
+import { HttpClient } from '@angular/common/http';
+import { Brand } from 'projects/frontProject/src/models/brand/brand';
+import {MatSelectModule} from '@angular/material/select';
+import { NewItemTypeIndustry } from 'projects/frontProject/src/models/new-item-type-industry/new-item-type-industry';
+
 export interface PeriodicElement {
   name: string;
   position: number;
   weight: number;
   symbol: string;
 }
+
+let brandList: string[] = [];
 
 const ELEMENT_DATA: PeriodicElement[] = [
   {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
@@ -54,15 +62,24 @@ const ELEMENT_DATA: PeriodicElement[] = [
     MatCheckboxModule,
     JsonPipe,
     MatButtonModule,
-    MatTableModule
+    MatTableModule,
+    MatSelectModule
   ],
 })
 
 export class ProcessProductComponent implements OnInit{
   panelOpenState = false;
-  myControl = new FormControl('');
+  industryControl = new FormControl('');
+  brandControl = new FormControl('');
   options: string[] = ['One', 'Two', 'Three'];
-  filteredOptions!: Observable<string[]>;
+  industryOptions!: NewItemTypeIndustry[] | undefined;
+  brandOptions!: Brand[] | undefined;
+  allItemCategory : NewItemTypeIndustry[] =[
+    {
+      newItemTypeCode: "all",
+      newItemTypeName: "全部",
+    },
+  ];
   searchData: NewItemReq = {};
   toppings = this._formBuilder.group({
     pepperoni: false,
@@ -70,24 +87,26 @@ export class ProcessProductComponent implements OnInit{
     mushroom: false,
   });
 
-  constructor(private _formBuilder: FormBuilder) {}
-
+  constructor(public http: HttpClient, private apiService: Service, private _formBuilder: FormBuilder) {}
   ngOnInit() {
-    console.log(this.filteredOptions)
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || '')),
-    );
-    console.log(this.filteredOptions)
+
+    this.apiService.NewItemTypeIndustryService.getNewItemTypeIndustryList$().pipe(
+      map(res => res.data),
+      tap(data=>  this.industryOptions = data)
+    ).subscribe()
+
+    this.apiService.BrandService.getBrandDetail$().pipe(
+      map(res => res.data),
+      map(data => data?.map((x)=>x.brandCategoryDto[0]).filter((x)=>x)),
+      tap(data=> this.brandOptions = data)
+    ).subscribe()
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
+  // private _filter(value: string): string[] {
+  //   const filterValue = value.toLowerCase();
 
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
-  }
-
-
+  //   return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  // }
 
   // table data
   displayedColumns: string[] = ['name', 'weight', 'symbol', 'position'];
