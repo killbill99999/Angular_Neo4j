@@ -5,9 +5,10 @@
 }
 
 .body-content{
-  top:140px;
+  position:absolute;
+  top:80px;
   left:290px;
-  width:80%;
+  width:900px;
   margin:0 40px 80px 40px;
   overflow: auto;
 }

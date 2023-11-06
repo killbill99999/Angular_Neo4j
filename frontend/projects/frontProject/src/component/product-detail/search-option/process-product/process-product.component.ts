@@ -18,7 +18,7 @@ import { HttpClient } from '@angular/common/http';
 import { Brand } from 'projects/frontProject/src/models/brand/brand';
 import {MatSelectModule} from '@angular/material/select';
 import { NewItemTypeIndustry } from 'projects/frontProject/src/models/new-item-type-industry/new-item-type-industry';
-
+import { FormArray } from '@angular/forms';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -81,13 +81,20 @@ export class ProcessProductComponent implements OnInit{
     },
   ];
   searchData: NewItemReq = {};
-  toppings = this._formBuilder.group({
-    pepperoni: false,
-    extracheese: false,
-    mushroom: false,
+  checkboxForm = this._formBuilder.group({
+    checkboxes: this._formBuilder.array([
+      this._formBuilder.control(false),
+      this._formBuilder.control(false),
+      this._formBuilder.control(false),
+    ])
   });
 
   constructor(public http: HttpClient, private apiService: Service, private _formBuilder: FormBuilder) {}
+
+  get checkboxes() {
+    return this.checkboxForm.get('checkboxes') as FormArray;
+  }
+
   ngOnInit() {
 
     this.apiService.NewItemTypeIndustryService.getNewItemTypeIndustryList$().pipe(
@@ -100,6 +107,15 @@ export class ProcessProductComponent implements OnInit{
       map(data => data?.map((x)=>x.brandCategoryDto[0]).filter((x)=>x)),
       tap(data=> this.brandOptions = data)
     ).subscribe()
+
+    this.checkboxes.valueChanges.subscribe(values => {
+      const checkedIndex = values.findIndex((value: any) => value === true);
+      this.checkboxes.controls.forEach((control, index) => {
+        if (index !== checkedIndex) {
+          control.setValue(false);
+        }
+      });
+    });
   }
 
   // private _filter(value: string): string[] {

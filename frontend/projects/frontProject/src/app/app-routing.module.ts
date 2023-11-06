@@ -15,14 +15,14 @@ const routes: Routes = [
       path: 'Dashboard',
       component: DashboardBackgroundComponent,
     },
-    {
-      path: 'productDetail',
-      component: ProductDetailLayout,
-    },
     // {
     //   path: 'productDetail',
-    //   component: ProductDetailComponent,
-    // }
+    //   component: ProductDetailLayout,
+    // },
+    {
+      path: 'productDetail',
+      component: ProductDetailComponent,
+    }
   ] },
   { path: 'detail/:id', component: HeroesDetailComponent },
   { path: 'heroes', component: HeroesComponent }

@@ -14,19 +14,9 @@
               <p>新品業種</p>
               <form class="example-form">
                 <mat-form-field class="example-full-width">
-                  <mat-label>全部</mat-label>
-                  <input type="text"
-                        [(ngModel)]="searchData.newItemName"
-                         placeholder="Pick one"
-                         aria-label="Number"
-                         matInput
-                         [formControl]="industryControl"
-                         [matAutocomplete]="industry">
-                  <mat-autocomplete autoActiveFirstOption #industry="matAutocomplete">
-                    <mat-option  *ngFor="let option of industryOptions | async" [value]="option">
-                      {{option}}
-                    </mat-option>
-                  </mat-autocomplete>
+                  <mat-select [(value)]="searchData.newItemName" formControlName="industryControl" placeholder="全部">
+                    <mat-option *ngFor="let industry of industryOptions" [value]="industry.newItemTypeCode">{{ industry.newItemTypeName }}</mat-option>
+                  </mat-select>
                 </mat-form-field>
               </form>
               <p>{{searchData.newItemName}}</p>
@@ -49,7 +39,7 @@
             </div>
             <div class="w-1/2">
               <p>新品狀態</p>
-              <section class="example-section" [formGroup]="toppings">
+              <section class="example-section" [formGroup]="checkboxForm">
                 <div class="flex">
                   <p class="ml-2"><mat-checkbox formControlName="pepperoni">新品草稿</mat-checkbox></p>
                   <p class="ml-2"><mat-checkbox formControlName="extracheese">新品成立</mat-checkbox></p>
@@ -81,13 +71,14 @@
             </div>
             <div class="w-1/2">
               <p>審核狀態</p>
-              <section class="example-section" [formGroup]="toppings">
+              <section class="example-section" [formGroup]="checkboxForm">
                 <div class="flex">
-                  <p class="ml-2"><mat-checkbox formControlName="pepperoni">審核中</mat-checkbox></p>
-                  <p class="ml-2"><mat-checkbox formControlName="extracheese">不同意</mat-checkbox></p>
-                  <p class="ml-2"><mat-checkbox formControlName="mushroom">審核完成</mat-checkbox></p>
+                  <p class="ml-2"><mat-checkbox formArrayName="checkboxes" [formControlName]="0">審核中</mat-checkbox></p>
+                  <p class="ml-2"><mat-checkbox formArrayName="checkboxes" [formControlName]="1">不同意</mat-checkbox></p>
+                  <p class="ml-2"><mat-checkbox formArrayName="checkboxes" [formControlName]="2">審核完成</mat-checkbox></p>
                 </div>
               </section>
+              <p>{{searchData.newItemStatus}}</p>
             </div>
           </div>
           <div class="flex w-full justify-center">

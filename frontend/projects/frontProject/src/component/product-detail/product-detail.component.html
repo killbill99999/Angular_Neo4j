@@ -1,7 +1,31 @@
-<!-- <button mat-fab extended color="primary" (click)="draw()" style="min-width:300px;">
-draw
-</button> -->
-<div class="table-container">
+<div>
+    <div class="search-bar">
+      <mat-form-field  style="min-width:750px;">
+        <mat-label>輸入Cypher</mat-label>
+        <input matInput [type]="'text'" [(ngModel)]="cypherText">
+      </mat-form-field>
+      <button mat-fab extended color="primary" (click)="draw()" style="min-width:100px;">
+      draw
+      </button>
+    </div>
+    <div>
+      <mat-form-field style="margin-left:15px;">
+        <mat-label>連接文字顏色</mat-label>
+        <input matInput [ngxMatColorPicker]="picker2" [(ngModel)]="colorCtr">
+        <ngx-mat-color-toggle matSuffix [for]="picker2"></ngx-mat-color-toggle>
+        <ngx-mat-color-picker #picker2></ngx-mat-color-picker>
+      </mat-form-field>
+
+      <mat-form-field style="margin-left:15px;">
+        <mat-label>連接線顏色</mat-label>
+        <input matInput [ngxMatColorPicker]="picker3" [(ngModel)]="lineColor">
+        <ngx-mat-color-toggle matSuffix [for]="picker3"></ngx-mat-color-toggle>
+        <ngx-mat-color-picker #picker3></ngx-mat-color-picker>
+      </mat-form-field>
+    </div>
+    <div id="viz" class="viz-style"></div>
+  </div>
+<!-- <div class="table-container">
   <table mat-table [dataSource]="data" class="data-table mat-elevation-z8">
     <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
       <th mat-header-cell *matHeaderCellDef> {{column}} </th>
@@ -11,5 +35,5 @@ draw
     <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
     <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
   </table>
-</div>
+</div> -->
 
