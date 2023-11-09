@@ -4,6 +4,14 @@
   top:180px;
 }
 
+.display-box{
+  margin-left:15px;
+  border:1.6px solid black;
+  width:90%;
+  height:400px;
+  background-color:#fff;
+}
+
 .body-content{
   position:absolute;
   top:80px;

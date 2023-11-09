@@ -1,14 +1,11 @@
 <div class="w-screen flex items-end">
   <div class="fixed nav-bar bg-neutral-400 bottom-0">
-    <div class="bg-neutral-400 top-block absolute rounded-se-3xl"></div>
+    <!-- <div class="bg-neutral-400 top-block absolute rounded-se-3xl"></div>
     <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-      <!-- This is the tree node template for leaf nodes -->
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding class="bg-neutral-400 ps-8">
-        <!-- use a disabled button to provide padding for tree leaf -->
         <button mat-icon-button disabled></button>
         {{node.name}}
       </mat-tree-node>
-      <!-- This is the tree node template for expandable nodes -->
       <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding class="bg-neutral-400">
         <button mat-icon-button matTreeNodeToggle
                 [attr.aria-label]="'Toggle ' + node.name">
@@ -18,7 +15,7 @@
         </button>
         {{node.name}}
       </mat-tree-node>
-    </mat-tree>
+    </mat-tree> -->
   </div>
   <div class="body-content absolute">
     <router-outlet></router-outlet>

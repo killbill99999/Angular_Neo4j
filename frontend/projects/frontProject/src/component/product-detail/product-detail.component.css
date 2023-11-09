@@ -1,9 +1,10 @@
 .body{
   display:flex;
-  width: 100%;
+  width:100%;
+  justify-content: baseline;
 }
-.data-table{
-  height:500px;
+.display-table{
+  width:300px;
 }
 .table-container {
   position: relative;
@@ -27,8 +28,12 @@ button {
 }
 
 .viz-style{
-  height:700px;
+  height:500px;
   width:100%;
   border: 1px solid black;
   background-color:#fff;
+}
+.sub-row{
+  display:flex;
+  align-items:center;
 }

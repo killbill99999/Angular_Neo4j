@@ -1,30 +1,81 @@
-<div>
-    <div class="search-bar">
-      <mat-form-field  style="min-width:750px;">
-        <mat-label>輸入Cypher</mat-label>
-        <input matInput [type]="'text'" [(ngModel)]="cypherText">
-      </mat-form-field>
-      <button mat-fab extended color="primary" (click)="draw()" style="min-width:100px;">
-      draw
-      </button>
-    </div>
-    <div>
-      <mat-form-field style="margin-left:15px;">
-        <mat-label>連接文字顏色</mat-label>
-        <input matInput [ngxMatColorPicker]="picker2" [(ngModel)]="colorCtr">
-        <ngx-mat-color-toggle matSuffix [for]="picker2"></ngx-mat-color-toggle>
-        <ngx-mat-color-picker #picker2></ngx-mat-color-picker>
-      </mat-form-field>
 
-      <mat-form-field style="margin-left:15px;">
-        <mat-label>連接線顏色</mat-label>
-        <input matInput [ngxMatColorPicker]="picker3" [(ngModel)]="lineColor">
-        <ngx-mat-color-toggle matSuffix [for]="picker3"></ngx-mat-color-toggle>
-        <ngx-mat-color-picker #picker3></ngx-mat-color-picker>
-      </mat-form-field>
+  <div>
+      <div class="search-bar">
+        <mat-form-field  style="min-width:770px;">
+          <mat-label>輸入Cypher</mat-label>
+          <input matInput [type]="'text'" [(ngModel)]="cypherText">
+        </mat-form-field>
+        <button mat-fab extended color="primary" (click)="draw()" style="min-width:100px;">
+        draw
+        </button>
+      </div>
+      <div>
+        <div>
+          <mat-form-field style="min-width:240px;">
+            <mat-label>選擇分類</mat-label>
+            <mat-select matNativeControl [(ngModel)]="selectedValue" name="food">
+              <mat-option *ngFor="let food of foods" [value]="food.value">
+                {{food.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field style="margin-left:15px;min-width:250px;">
+            <mat-label>選擇子分類</mat-label>
+            <mat-select matNativeControl [(ngModel)]="selectedSubValue" name="category">
+              <mat-option *ngFor="let category of subCategory" [value]="category.value">
+                {{category.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field style="margin-left:15px;min-width:250px;">
+            <mat-label>關聯類別</mat-label>
+            <mat-select matNativeControl [(ngModel)]="selectedTypeValue" name="type">
+              <mat-option *ngFor="let type of typeList" [value]="type.value">
+                {{type.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button (click)="saveCanvasAsImage()" mat-fab extended color="primary" style="min-width:100px;margin-left:22px;">
+            下載
+            </button>
+        </div>
+
+        <div>
+          <mat-form-field  style="width:240px;">
+            <mat-label>限制筆數</mat-label>
+            <input matInput [type]="'number'" [(ngModel)]="limitCount">
+          </mat-form-field>
+          <mat-form-field style="margin-left:15px;min-width:240px;">
+            <mat-label>連接文字顏色</mat-label>
+            <input matInput [ngxMatColorPicker]="picker2" [(ngModel)]="colorCtr">
+            <ngx-mat-color-toggle matSuffix [for]="picker2"></ngx-mat-color-toggle>
+            <ngx-mat-color-picker #picker2></ngx-mat-color-picker>
+          </mat-form-field>
+          <mat-form-field style="margin-left:15px;min-width:240px;">
+            <mat-label>連接線顏色</mat-label>
+            <input matInput [ngxMatColorPicker]="picker3" [(ngModel)]="lineColor">
+            <ngx-mat-color-toggle matSuffix [for]="picker3"></ngx-mat-color-toggle>
+            <ngx-mat-color-picker #picker3></ngx-mat-color-picker>
+          </mat-form-field>
+        </div>
+      </div>
+        <div class="sub-row">
+          <section class="example-section" style="min-width:240px;margin-bottom:15px;">
+            <label class="example-margin" style="margin-right:10px;">間距</label>
+            <mat-slider class="example-margin" [max]="maxValue" style="min-width:190px;">
+              <input type="range" [(ngModel)]="lengthValue" matSliderThumb>
+            </mat-slider>
+          </section>
+          <div style="margin-left:15px;">
+            <p>選取的資料:</p>
+            <p>{{ selectedNodeData }}</p>
+          </div>
+        </div>
+      <div id="viz" class="viz-style"></div>
+      <div style="width:100%;margin-bottom:40px;"></div>
     </div>
-    <div id="viz" class="viz-style"></div>
-  </div>
 <!-- <div class="table-container">
   <table mat-table [dataSource]="data" class="data-table mat-elevation-z8">
     <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
