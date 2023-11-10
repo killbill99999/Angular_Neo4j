@@ -11,7 +11,11 @@ import {MatSliderModule} from '@angular/material/slider';
 import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
 import { ThemePalette } from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
+import JsPDF from "jspdf";
+
 import * as neo4j from 'neo4j-driver';
+import html2Canvas from "html2canvas";
+
 
 export interface PeriodicElement {
   name: string;
@@ -52,9 +56,9 @@ const ELEMENT_DATA: PeriodicElement[] = [
    ],
 })
 export class ProductDetailComponent implements AfterViewInit{
-
   ngAfterViewInit() {
-    this.getNodeNames();
+    // this.getNodeNames();
+    this.draw();
   };
 
   hide = true;
@@ -342,6 +346,38 @@ saveCanvasAsImage() {
   link.download = 'neoVisChart.png';
   link.click();
   context.globalAlpha = 1; // 恢复为完全不透明
+}
+
+  async toCanvasAndDownload(){
+  const toCanvasElement = document.getElementById("viz");
+  let blob = null;
+  if (toCanvasElement) {
+    blob = await html2Canvas(toCanvasElement, {
+      allowTaint: false,
+      useCORS: true,
+    }).then(function (canvas) {
+      const contentWidth = canvas.width;
+      const contentHeight = canvas.height;
+      const position = 0;
+      const imgWidth = 595.28;
+      const imgHeight = (592.28 / contentWidth) * contentHeight;
+
+      const pageData = canvas.toDataURL("image/jpeg", 1.0);
+      console.log(pageData);
+      const PDF = new JsPDF("l", "pt", [imgWidth, imgHeight + 30]);
+
+      PDF.addImage(
+        pageData,
+        "JPEG",
+        10,
+        position + 10,
+        imgWidth - 20,
+        imgHeight + 10
+      );
+        PDF.save("Neo4j Neovis" + ".pdf");
+        return null;
+    });
+  }
 }
 
 }

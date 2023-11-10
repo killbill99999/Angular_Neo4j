@@ -1,7 +1,8 @@
 .nav-bar{
+  position:absolute;
   width:300px;
   min-height:500px;
-  top:180px;
+  top:30px;
 }
 
 .display-box{
