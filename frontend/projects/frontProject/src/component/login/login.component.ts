@@ -21,6 +21,6 @@ export class LoginComponent {
     private router: Router,
     ) {};
   onClick(){
-this.router.navigateByUrl("/Dashboard")
+this.router.navigateByUrl("/productDetail")
 }
 }
