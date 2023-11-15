@@ -71,10 +71,16 @@ export class ProductDetailComponent implements AfterViewInit{
    colorCtr: any = '';
    lineColor: any = '';
 
+  nameKeyWord: string = '';
+  titleKeyWord: string = '';
+  releasedKeyWord: string = '';
+  taglineKeyWord: string = '';
   cypherText: string = '';
   displayedColumns: string[] = ['name', 'weight', 'symbol', 'position'];
   columnsToDisplay: string[] = this.displayedColumns.slice();
   data: PeriodicElement[] = ELEMENT_DATA;
+
+  selectedNodeName: string = '';
 
  driver = neo4j.driver('bolt://10.20.30.34:7687', neo4j.auth.basic('neo4j', 'password'));
  session = this.driver.session();
@@ -172,7 +178,27 @@ export class ProductDetailComponent implements AfterViewInit{
     }
   }
 
-  draw() {
+  draw(text?: string) {
+    console.log(`MATCH (n1${text || this.computedValue})-[r${this.computedTypeValue}]->(n2${this.computedSubValue}) RETURN r, n1, n2${this.computedLimitCount}`)
+    const cypherRender = () => {
+      if(this.nameKeyWord && !this.titleKeyWord){
+        console.log(`MATCH (n1${text || this.computedValue})-[r${this.computedTypeValue}]->(n2${this.computedSubValue}) WHERE n1.name = '${this.nameKeyWord}' RETURN r, n1, n2${this.computedLimitCount}`);
+        return this.cypherText ? this.cypherText : `MATCH (n1${text || this.computedValue})-[r${this.computedTypeValue}]->(n2${this.computedSubValue}) WHERE n1.name = '${this.nameKeyWord}' RETURN r, n1, n2${this.computedLimitCount}`
+      }
+      if(this.titleKeyWord && !this.nameKeyWord){
+        console.log(`MATCH (n1${text || this.computedValue})<-[r${this.computedTypeValue}]-(n2${this.computedSubValue}) WHERE n1.title = '${this.titleKeyWord}' RETURN r, n1, n2${this.computedLimitCount}`);
+        return this.cypherText ? this.cypherText : `MATCH (n1${text || this.computedValue})<-[r${this.computedTypeValue}]-(n2${this.computedSubValue}) WHERE n1.title = '${this.titleKeyWord}' RETURN r, n1, n2${this.computedLimitCount}`
+      }
+      if(this.titleKeyWord && this.nameKeyWord){
+        console.log(`MATCH (n1${text || this.computedValue})-[r${this.computedTypeValue}]-(n2${this.computedSubValue}) WHERE n1.name = '${this.nameKeyWord}' OR n1.title = '${this.titleKeyWord}' RETURN r, n1, n2${this.computedLimitCount}`);
+        return this.cypherText ? this.cypherText : `MATCH (n1${text || this.computedValue})-[r${this.computedTypeValue}]-(n2${this.computedSubValue}) WHERE n1.name = '${this.nameKeyWord}' OR n1.title = '${this.titleKeyWord}' RETURN r, n1, n2${this.computedLimitCount}`
+      }
+      if(this.titleKeyWord && this.releasedKeyWord && this.taglineKeyWord){
+        console.log(`MATCH (n1${text || this.computedValue})<-[r${this.computedTypeValue}]-(n2${this.computedSubValue}) WHERE n1.released = '${this.releasedKeyWord}' AND n1.title = '${this.titleKeyWord}' AND n1.tagline = '${this.taglineKeyWord}' RETURN r, n1, n2${this.computedLimitCount}`);
+        return this.cypherText ? this.cypherText : `MATCH (n1${text || this.computedValue})<-[r${this.computedTypeValue}]-(n2${this.computedSubValue}) WHERE n1.released = '${this.releasedKeyWord}' AND n1.title = '${this.titleKeyWord}' AND n1.tagline = '${this.taglineKeyWord}' RETURN r, n1, n2${this.computedLimitCount}`
+      }
+      return this.cypherText ? this.cypherText : `MATCH (n1${text || this.computedValue})-[r${this.computedTypeValue}]->(n2${this.computedSubValue}) RETURN r, n1, n2${this.computedLimitCount}`
+     }
     var config : NeovisConfig = {
       containerId: "viz",
       neo4j: {
@@ -314,7 +340,7 @@ export class ProductDetailComponent implements AfterViewInit{
             // },
         },
     },
-      initialCypher: this.cypherText ? this.cypherText : `MATCH (n1${this.computedValue})-[r${this.computedTypeValue}]->(n2${this.computedSubValue}) RETURN r, n1, n2${this.computedLimitCount}`
+      initialCypher: cypherRender()
  }
     var viz = new NeoVis(config) as any;
     viz.render();
@@ -322,12 +348,33 @@ export class ProductDetailComponent implements AfterViewInit{
       this.selectedNodeData = data;
     }
 
-    this.selectedNodeData = viz.registerOnEvent('clickNode', function (event: any) {
-      console.log(event.node.raw.properties);
+    const setSelectedNodeName = (name?: string, title?: string) =>{
+      if(name){
+        this.selectedNodeName = `{name:'${name}'}`;
+      }
+      if(title){
+        this.selectedNodeName = `{title:'${title}'}`;
+      }
+    }
+
+    // updateWithCypher用於更輕量級的更新，而不必完全重新渲染整個圖形。
+    const updateViz = (name?: string, title?: string) =>{
+      viz.clearNetwork();
+      if(name){
+        viz.updateWithCypher(`MATCH (n1{name:'${name}'})-[r${this.computedTypeValue}]->(n2${this.computedSubValue}) RETURN r, n1, n2${this.computedLimitCount}`);
+      }
+      if(title){
+        viz.updateWithCypher(`MATCH (n1{title:'${title}'})<-[r${this.computedTypeValue}]-(n2${this.computedSubValue}) RETURN r, n1, n2${this.computedLimitCount}`);
+      }
+    }
+
+    this.selectedNodeData = viz.registerOnEvent('clickNode', async function (event: any) {
+      if(event.node){
+      console.log(event);
       const dataList = Object.keys(event.node.raw.properties).map(item=> ` ${item}:${event.node.raw.properties[item]}`)
       setSelectedNodeData(dataList);
+      updateViz(event.node.raw.properties?.name, event.node.raw.properties?.title);}
     });
-
 }
 
 saveCanvasAsImage() {

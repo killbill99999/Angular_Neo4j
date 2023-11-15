@@ -1,6 +1,24 @@
 
   <div>
       <div class="search-bar">
+        <mat-form-field  style="min-width:220px;">
+          <mat-label>輸入名稱關鍵字</mat-label>
+          <input matInput [type]="'text'" [(ngModel)]="nameKeyWord">
+        </mat-form-field>
+        <mat-form-field  style="min-width:220px;">
+          <mat-label>輸入標題關鍵字</mat-label>
+          <input matInput [type]="'text'" [(ngModel)]="titleKeyWord">
+        </mat-form-field>
+        <mat-form-field  style="min-width:220px;">
+          <mat-label>輸入標籤關鍵字</mat-label>
+          <input matInput [type]="'text'" [(ngModel)]="taglineKeyWord">
+        </mat-form-field>
+        <mat-form-field  style="min-width:220px;">
+          <mat-label>輸入上映時間關鍵字</mat-label>
+          <input matInput [type]="'text'" [(ngModel)]="releasedKeyWord">
+        </mat-form-field>
+      </div>
+      <div class="search-bar">
         <mat-form-field  style="min-width:770px;">
           <mat-label>輸入Cypher</mat-label>
           <input matInput [type]="'text'" [(ngModel)]="cypherText">
@@ -59,6 +77,9 @@
             <ngx-mat-color-toggle matSuffix [for]="picker3"></ngx-mat-color-toggle>
             <ngx-mat-color-picker #picker3></ngx-mat-color-picker>
           </mat-form-field>
+          <!-- <button (click)="draw(selectedNodeName)" mat-fab extended color="primary" style="min-width:100px;margin-left:22px;" [disabled]="!selectedNodeName">
+            渲染分支
+            </button> -->
         </div>
       </div>
         <div class="sub-row">
