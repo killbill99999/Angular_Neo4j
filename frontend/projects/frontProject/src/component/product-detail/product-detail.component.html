@@ -77,9 +77,7 @@
             <ngx-mat-color-toggle matSuffix [for]="picker3"></ngx-mat-color-toggle>
             <ngx-mat-color-picker #picker3></ngx-mat-color-picker>
           </mat-form-field>
-          <!-- <button (click)="draw(selectedNodeName)" mat-fab extended color="primary" style="min-width:100px;margin-left:22px;" [disabled]="!selectedNodeName">
-            渲染分支
-            </button> -->
+          <mat-slide-toggle [(ngModel)]="removeItem">Slide me!</mat-slide-toggle>
         </div>
       </div>
         <div class="sub-row">

@@ -8,6 +8,7 @@ import {MatInputModule} from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSliderModule} from '@angular/material/slider';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
 import { ThemePalette } from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
@@ -50,7 +51,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./product-detail.component.css'],
   templateUrl: './product-detail.component.html',
   standalone: true,
-  imports: [MatButtonModule, MatInputModule, MatTableModule, MatIconModule, NgFor, FormsModule, NgxMatColorPickerModule, MatSelectModule, MatFormFieldModule, MatSliderModule],
+  imports: [MatButtonModule, MatInputModule, MatTableModule, MatIconModule, NgFor, FormsModule, NgxMatColorPickerModule, MatSelectModule, MatFormFieldModule, MatSliderModule, MatSlideToggleModule],
   providers: [
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }
    ],
@@ -106,6 +107,7 @@ export class ProductDetailComponent implements AfterViewInit{
   lengthValue = 500;
   maxValue = 1000;
 
+  removeItem: boolean = false;
   limitCount: number = 10;
   nodeSize: number = 100;
   selectedValue: string = "All";
@@ -202,50 +204,29 @@ export class ProductDetailComponent implements AfterViewInit{
     var config : NeovisConfig = {
       containerId: "viz",
       neo4j: {
-          serverUrl: "bolt://10.20.30.34:7687",
+        //   serverUrl: "neo4j://294ad229.databases.neo4j.io",
+        serverUrl: "bolt://10.20.30.34:7687",
           serverUser: "neo4j",
-          serverPassword: "password"
+          serverPassword: "password",
+        //   serverPassword: "4IkDPJSFGw_oTrOZdCZrC7nzW00eFmrBzJLq8UycfdQ",
+        //   driverConfig: { 
+        //     encrypted: "ENCRYPTION_ON",
+        //     trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES"
+        //     }
       },
       labels: {
           DB: {
-              label: "name",
-              value: "pagerank",
-              size: "20",
-              font: {
-                size: '12',
-                color: `#${this.mainColor.hex}`
-              },
+            label: "name",
           },
           Tool: {
             label: "name",
-            value: "pagerank",
-            size: "20",
-            font: {
-              size: '12',
-              color: `#${this.mainColor.hex}`
-            }
           },
           Movie: {
             label: "title",
-            value: "pagerank",
-            size: "20",
-            font: {
-              size: '12',
-              color: `#${this.mainColor.hex}`
-            },
-            // color: {
-            //   background: "#e9a89b",
-            //   highlight: "#e9a89b",
-            // }
+            color: "#000000", 
           },
           Person: {
             label: "name",
-            value: "pagerank",
-            size: "20",
-            font: {
-              size: '12',
-              color: `#${this.mainColor.hex}`
-            }
           },
       },
       relationships: {
@@ -260,72 +241,160 @@ export class ProductDetailComponent implements AfterViewInit{
                       "size": 12,
                       "color": `#${this.colorCtr.hex}` || '#000000',
                   }
+              },
+              function: function(nodeData:any,callback:any) {
+                console.log(nodeData,callback)
+                // nodeData.label = 'hello world';
+                // callback(nodeData);
               }
           }
-      },
-      WROTE: {
-        [NeoVis.NEOVIS_ADVANCED_CONFIG]: {
-            static: {
-                label: "WROTE",
-                color: `#${this.lineColor.hex}` || '#000000',
-                font: {
-                    "background": "none",
-                    "strokeWidth": "10",
-                    "size": 12,
-                    "color": `#${this.colorCtr.hex}` || '#000000',
+        },
+        WROTE: {
+            [NeoVis.NEOVIS_ADVANCED_CONFIG]: {
+                static: {
+                    label: "WROTE",
+                    color: `#${this.lineColor.hex}` || '#000000',
+                    font: {
+                        "background": "none",
+                        "strokeWidth": "10",
+                        "size": 12,
+                        "color": `#${this.colorCtr.hex}` || '#000000',
+                    }
+                }
+            }
+        },
+        DIRECTED: {
+            [NeoVis.NEOVIS_ADVANCED_CONFIG]: {
+                static: {
+                    label: "DIRECTED",
+                    color: `#${this.lineColor.hex}` || '#000000',
+                    font: {
+                        "background": "none",
+                        "strokeWidth": "10",
+                        "size": 12,
+                        "color": `#${this.colorCtr.hex}` || '#000000',
+                    }
+                }
+            }
+        },
+        CONTAINS: {
+            [NeoVis.NEOVIS_ADVANCED_CONFIG]: {
+                static: {
+                    label: "CONTAINS",
+                    color: `#${this.lineColor.hex}` || '#000000',
+                    font: {
+                        "background": "none",
+                        "strokeWidth": "10",
+                        "size": 12,
+                        "color": `#${this.colorCtr.hex}` || '#000000',
+                    }
                 }
             }
         }
-    },
-    DIRECTED: {
-      [NeoVis.NEOVIS_ADVANCED_CONFIG]: {
-          static: {
-              label: "DIRECTED",
-              color: `#${this.lineColor.hex}` || '#000000',
-              font: {
-                  "background": "none",
-                  "strokeWidth": "10",
-                  "size": 12,
-                  "color": `#${this.colorCtr.hex}` || '#000000',
-              }
-          }
-      }
-  },
-      CONTAINS: {
-          [NeoVis.NEOVIS_ADVANCED_CONFIG]: {
-              static: {
-                  label: "CONTAINS",
-                  color: `#${this.lineColor.hex}` || '#000000',
-                  font: {
-                      "background": "none",
-                      "strokeWidth": "10",
-                      "size": 12,
-                      "color": `#${this.colorCtr.hex}` || '#000000',
-                  }
-              }
-          }
-      }
       },
       visConfig: {
         autoResize: true,
+        configure: {
+            filter:function (option:any, path:any) {
+                console.log(option);
+                return path.indexOf('physics') !== -1;
+              },
+              showButton: true,
+        },
         // clickToUse: true, // 點擊canvas後才可異動
+        // layout:{
+        //     hierarchical: true,
+        // },
+        manipulation: {
+            addNode: function(nodeData:any,callback:any) {
+              nodeData.label = 'hello world';
+              callback(nodeData);
+            },
+            deleteNode: function(nodeData:any,callback:any) {
+                nodeData.label = 'hello world';
+                callback(nodeData);
+            },
+            controlNodeStyle:{
+                shape:'dot',
+                size:6,
+                color: {
+                  background: '#ff0000',
+                  border: '#3c3c3c',
+                  highlight: {
+                    background: '#07f968',
+                    border: '#3c3c3c'
+                  }
+                },
+                borderWidth: 2,
+                borderWidthSelected: 2
+              }
+          },
+        interaction:{
+            multiselect: true,
+            navigationButtons: true,
+            keyboard: {enabled: true}
+        },
         nodes: {
             shape: 'circle',
             borderWidth: 0,
             widthConstraint: {
               minimum: 200,
               maximum: 200
-          },
+            },
+            color: {
+                background: "#FF5733", // 设置节点背景颜色
+                border: "#D32F2F", // 设置节点边框颜色
+                highlight: {
+                  background: "#FFC107", // 设置节点被高亮时的背景颜色
+                  border: "#FF9800", // 设置节点被高亮时的边框颜色
+                },
+              },
+              chosen: {
+                // chosen可以抓取到node的id和樣式
+                node: function(values: any,
+                    id: any,
+                    selected: boolean,
+                    hovered: boolean){
+                    console.log(values, id, selected, hovered);
+                },
+                label: true,
+              }
             // physics: false, // 節點可移動到固定位置
         },
         physics: {
-          enabled: true,
-          barnesHut: {
-            // centralGravity: 0,
-            // gravitationalConstant: -20000,  //调整引力常数，根据需要适应距离
-            // springLength: 150, // 调整弹簧长度，根据需要适应距离
+            forceAtlas2Based: {
+              gravitationalConstant: -200,
+              centralGravity: 0.02,
+              springLength: 100,
+              springConstant: 0.01,
+            },
+            maxVelocity: 50,
+            solver: "forceAtlas2Based",
+            timestep: 0.35,
+            stabilization: { iterations: 150 },
           },
+        // physics: {
+        //   enabled: true,
+        //   barnesHut: {
+        //     // centralGravity: 0,
+        //     // gravitationalConstant: -20000,  //调整引力常数，根据需要适应距离
+        //     // springLength: 150, // 调整弹簧长度，根据需要适应距离
+        //   },
+        // },
+
+        groups: {
+            Person: {
+              color: {
+                background: "#FF5733", // 设置节点背景颜色
+                // border: "#D32F2F", // 设置节点边框颜色
+                // highlight: {
+                //   background: "#FFC107", // 设置节点被高亮时的背景颜色
+                //   border: "#FF9800", // 设置节点被高亮时的边框颜色
+                // },
+              },
+            },
         },
+
         edges: {
             // arrows: {
             //     to: true,
@@ -333,6 +402,16 @@ export class ProductDetailComponent implements AfterViewInit{
             color: `#${this.colorCtr.hex}` || '#000000', //連結線顏色
             length: this.lengthValue, //連結線長度
             hoverWidth: 200,
+            // chosen可以抓取到relationship的id和樣式
+            chosen: { 
+                edge: function(values: any,
+                    id: any,
+                    selected: boolean,
+                    hovered: boolean){
+                    console.log(values, id, selected, hovered);
+                } as any,
+                label: true,
+              },
             // smooth: {
             //   enabled: false,
             //   type: "WROTE",
@@ -340,7 +419,8 @@ export class ProductDetailComponent implements AfterViewInit{
             // },
         },
     },
-      initialCypher: cypherRender()
+      initialCypher: cypherRender(),
+    // initialCypher: "MATCH p=()-[:FRIEND_OF]->() RETURN p",
  }
     var viz = new NeoVis(config) as any;
     viz.render();
@@ -368,12 +448,28 @@ export class ProductDetailComponent implements AfterViewInit{
       }
     }
 
+    // viz.registerOnEvent('clickRelationship', function (properties: any) {
+    //     console.log(properties);
+    // });
+
+    const isRemove = () => {
+        return this.removeItem
+    }
+    const removeItem = (nodeId:any) => {
+        viz.clearNetwork();
+        viz.updateWithCypher(`MATCH (n1)<-[r${this.computedTypeValue}]-(n2${this.computedSubValue}) WHERE ID(n1) <> ' + ${nodeId} + ' RETURN r, n1, n2${this.computedLimitCount}`);
+    }
+
     this.selectedNodeData = viz.registerOnEvent('clickNode', async function (event: any) {
-      if(event.node){
+      if(!isRemove() && event.node){
       console.log(event);
       const dataList = Object.keys(event.node.raw.properties).map(item=> ` ${item}:${event.node.raw.properties[item]}`)
       setSelectedNodeData(dataList);
-      updateViz(event.node.raw.properties?.name, event.node.raw.properties?.title);}
+      updateViz(event.node.raw.properties?.name, event.node.raw.properties?.title);
+    }
+    if(isRemove()){
+        removeItem(event.nodeId);
+    }
     });
 }
 
