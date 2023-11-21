@@ -131,6 +131,7 @@ export class ProductDetailComponent implements AfterViewInit{
   ];
 
   selectedNodeData:string[] = [];
+  selectedEdgeData:string[] = [];
 
   get computedLimitCount(): string {
     // 在这里计算属性的值，例如，将 originalValue 加倍
@@ -221,8 +222,14 @@ export class ProductDetailComponent implements AfterViewInit{
           Tool: {
             label: "name",
           },
+        //   Database: {
+        //     label: "name",
+        //   },
+        //   Message: {
+        //     label: "name",
+        //   },
           Movie: {
-            label: "title",
+            label: "title" || "name",
             color: "#000000", 
           },
           Person: {
@@ -242,11 +249,11 @@ export class ProductDetailComponent implements AfterViewInit{
                       "color": `#${this.colorCtr.hex}` || '#000000',
                   }
               },
-              function: function(nodeData:any,callback:any) {
-                console.log(nodeData,callback)
-                // nodeData.label = 'hello world';
-                // callback(nodeData);
-              }
+            //   function: {
+            //     title: (edge:any) => {
+            //         return viz.nodeToHtml(edge, undefined);
+            //     }
+            // },
           }
         },
         WROTE: {
@@ -356,6 +363,7 @@ export class ProductDetailComponent implements AfterViewInit{
                     selected: boolean,
                     hovered: boolean){
                     console.log(values, id, selected, hovered);
+                    console.log(viz.network.getConnectedNodes(id));
                 },
                 label: true,
               }
@@ -402,6 +410,7 @@ export class ProductDetailComponent implements AfterViewInit{
             color: `#${this.colorCtr.hex}` || '#000000', //連結線顏色
             length: this.lengthValue, //連結線長度
             hoverWidth: 200,
+            widthConstraint: true,
             // chosen可以抓取到relationship的id和樣式
             chosen: { 
                 edge: function(values: any,
@@ -409,6 +418,7 @@ export class ProductDetailComponent implements AfterViewInit{
                     selected: boolean,
                     hovered: boolean){
                     console.log(values, id, selected, hovered);
+                    console.log(viz.network.getConnectedNodes(id));
                 } as any,
                 label: true,
               },
@@ -458,6 +468,17 @@ export class ProductDetailComponent implements AfterViewInit{
     const removeItem = (nodeId:any) => {
         viz.clearNetwork();
         viz.updateWithCypher(`MATCH (n1)<-[r${this.computedTypeValue}]-(n2${this.computedSubValue}) WHERE ID(n1) <> ' + ${nodeId} + ' RETURN r, n1, n2${this.computedLimitCount}`);
+    }
+
+    this.selectedEdgeData = viz.registerOnEvent('clickEdge', async function (event: any) {
+        console.log(event);
+        // viz.clearNetwork();
+        viz.updateWithFunction(function(){
+            setColor();
+        })
+    });
+    const setColor = () => {
+        this.lineColor = "#FF5733"
     }
 
     this.selectedNodeData = viz.registerOnEvent('clickNode', async function (event: any) {
