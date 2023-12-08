@@ -24,18 +24,21 @@ export class DashboardBackgroundComponent implements AfterViewInit{
 
     groups = {}
 
-    editGroup() {
-       this.groups = { diamonds : {
-        color: { background: "red", border: "white" },
-        shape: "diamond",
-      }}
-    }
+    groupName: string = '';
+
+    // editGroup() {
+    //    this.groups = { diamonds : {
+    //     color: { background: "red", border: "white" },
+    //     shape: "diamond",
+    //   }}
+    // }
 
        nodes = new DataSet([
         { id: 1, label: 'Node 1', group: 'diamonds', title: 'I have a popup!',   chosen: {
             node: () => {
                 console.log('diamonds', this.groups)
-                this.editGroup();
+                // this.editGroup();
+                this.groupName = 'diamonds';
                 console.log(this.groups)
             },
             label: true,
@@ -95,22 +98,35 @@ export class DashboardBackgroundComponent implements AfterViewInit{
                     borderWidthSelected: 2
                   }
             }
-        };
+        } as any;
         var network = new Network(container, data, options);
-        
+
+        // 修改樣式
+        // this.groupName為當前選的節點的group
+        var change = () =>{
+            options.groups[this.groupName] =  {
+                color: { background: "red", border: "white" },
+                shape: "diamond",
+              }
+            network.setOptions(options);
+        }
+        var changeColor = document.getElementById('colorChange');
+        if(changeColor){
+        changeColor.onclick = function(){
+            change();
+        }}
         network.on( 'click', (properties) => {
+            console.log(properties, properties.nodes);
+
+            // 模擬api回傳資料，並更新vis
             // network.setData({
             //     nodes: [{ id: 1, label: 'Node 1', group: 'diamonds' }, { id: 2, label: 'Node 2', group: 0 }],
             //     edges: [{ from: 1, to: 2 }],
             // } as any);
-            this.editGroup();
-            console.log(properties, properties.nodes);
-            options.groups = { diamonds : {
-                color: { background: "red", border: "white" },
-                shape: "diamond",
-              }}
-            // console.log(options);
-            network.setOptions(options);
+            // this.editGroup();
+
+            // 內部點擊節點修改樣式
+            // change();
         });
         // network.on( 'selectNode', function(properties) {
         //     console.log(properties);
