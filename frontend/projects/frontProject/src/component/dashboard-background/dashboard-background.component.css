@@ -1,3 +1,9 @@
 .background-image{
   margin-bottom:68px;
 }
+
+#mynetwork {
+    width: 1000px;
+    height: 800px;
+    border: 1px solid lightgray;
+  }
