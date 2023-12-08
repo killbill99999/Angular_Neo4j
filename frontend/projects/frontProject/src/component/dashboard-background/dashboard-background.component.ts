@@ -10,44 +10,33 @@ import { DataSet, Network } from 'vis-network/standalone/esm/vis-network';
 })
 export class DashboardBackgroundComponent implements AfterViewInit{
     ngAfterViewInit() {
-        // this.getNodeNames();
         this.draw();
       };
 
-    //   chosen: {
-    //     // chosen可以抓取到node的id和樣式
-    //     node: function(){
-    //         console.log('diamonds')
-    //     },
-    //     label: true,
-    // } 
+    groups = {} // 預設group 
 
-    groups = {}
-
-    groupName: string = '';
-
-    // editGroup() {
-    //    this.groups = { diamonds : {
-    //     color: { background: "red", border: "white" },
-    //     shape: "diamond",
-    //   }}
-    // }
-
-       nodes = new DataSet([
-        { id: 1, label: 'Node 1', group: 'diamonds', title: 'I have a popup!',   chosen: {
-            node: () => {
-                console.log('diamonds', this.groups)
-                // this.editGroup();
-                this.groupName = 'diamonds';
-                console.log(this.groups)
+    groupName: string = ''; // 當前選取的節點的所屬group
+    
+    /** 設定nodes的dataSet的chosen
+     *  return chosen所需的function
+     * */
+    setGroup = (groupname: string)=>{
+        return {
+            node: (v:any) => {
+                this.groupName = groupname;
+                console.log(v);
             },
             label: true,
-        } },
-        { id: 2, label: 'Node 2', group: 'diamonds', title: 'I have a popup!' },
-        { id: 3, label: 'Node 3', group: 'one', title: 'I have a popup!' },
-        { id: 4, label: 'Node 4', group: 'one', title: 'I have a popup!' },
-        { id: 5, label: 'Node 5', group: 'two', title: 'I have a popup!' },
-        { id: 6, label: 'Node 6', group: 'two', title: 'I have a popup!' },
+        } 
+    }
+
+       nodes = new DataSet([
+        { id: 1, label: 'Node 1', group: 'diamonds', title: 'I have a popup!', chosen: this.setGroup('diamonds')},
+        { id: 2, label: 'Node 2', group: 'diamonds', title: 'I have a popup!', chosen: this.setGroup('diamonds') },
+        { id: 3, label: 'Node 3', group: 'one', title: 'I have a popup!', chosen: this.setGroup('one') },
+        { id: 4, label: 'Node 4', group: 'one', title: 'I have a popup!', chosen: this.setGroup('one')  },
+        { id: 5, label: 'Node 5', group: 'two', title: 'I have a popup!', chosen: this.setGroup('two') },
+        { id: 6, label: 'Node 6', group: 'two', title: 'I have a popup!', chosen: this.setGroup('two') },
       ] as any);
       
       edges = new DataSet([
@@ -101,8 +90,7 @@ export class DashboardBackgroundComponent implements AfterViewInit{
         } as any;
         var network = new Network(container, data, options);
 
-        // 修改樣式
-        // this.groupName為當前選的節點的group
+        // 修改樣式 this.groupName為當前選的節點的group
         var change = () =>{
             options.groups[this.groupName] =  {
                 color: { background: "red", border: "white" },
@@ -110,11 +98,15 @@ export class DashboardBackgroundComponent implements AfterViewInit{
               }
             network.setOptions(options);
         }
+
+        // 由外部元件或Dom 修改vis
         var changeColor = document.getElementById('colorChange');
         if(changeColor){
         changeColor.onclick = function(){
             change();
         }}
+
+        // 內部點擊節點
         network.on( 'click', (properties) => {
             console.log(properties, properties.nodes);
 
@@ -128,14 +120,15 @@ export class DashboardBackgroundComponent implements AfterViewInit{
             // 內部點擊節點修改樣式
             // change();
         });
-        // network.on( 'selectNode', function(properties) {
-        //     console.log(properties);
-        // });
+
+        // Popup
         network.on( 'showPopup', function(params) {
             console.log(params);
             var popup = document.getElementById('root') as any;
             popup.innerHTML = '<h2>showPopup event</h2>'+ JSON.stringify(params, null, 4);
         });
+
+        // 節點hover
         network.on("hoverNode", function(){
             // functionality for popup to show on mouseover
           });
