@@ -2,16 +2,22 @@ import {Component, AfterViewInit} from '@angular/core';
 import { network } from 'vis-network';
 // import * as vis from 'vis-network';
 import { DataSet, Network } from 'vis-network/standalone/esm/vis-network';
-
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-dashboard-background',
   templateUrl: './dashboard-background.component.html',
-  styleUrls: ['./dashboard-background.component.css']
+  styleUrls: ['./dashboard-background.component.css'],
+  standalone: true,
+  imports: [MatInputModule, MatFormFieldModule, FormsModule]
 })
 export class DashboardBackgroundComponent implements AfterViewInit{
     ngAfterViewInit() {
         this.draw();
       };
+
+    color: string = '';
 
     groups = {} // 預設group 
 
@@ -20,23 +26,24 @@ export class DashboardBackgroundComponent implements AfterViewInit{
     /** 設定nodes的dataSet的chosen
      *  return chosen所需的function
      * */
-    setGroup = (groupname: string)=>{
-        return {
-            node: (v:any) => {
-                this.groupName = groupname;
-                console.log(v);
-            },
-            label: true,
-        } 
-    }
+    // setGroup = (groupname: string)=>{
+    //     return {
+    //         node: (v:any) => {
+    //             this.groupName = groupname;
+    //             this.color = v.color;
+    //             console.log(v);
+    //         },
+    //         label: true,
+    //     } 
+    // }
 
        nodes = new DataSet([
-        { id: 1, label: 'Node 1', group: 'diamonds', title: 'I have a popup!', chosen: this.setGroup('diamonds')},
-        { id: 2, label: 'Node 2', group: 'diamonds', title: 'I have a popup!', chosen: this.setGroup('diamonds') },
-        { id: 3, label: 'Node 3', group: 'one', title: 'I have a popup!', chosen: this.setGroup('one') },
-        { id: 4, label: 'Node 4', group: 'one', title: 'I have a popup!', chosen: this.setGroup('one')  },
-        { id: 5, label: 'Node 5', group: 'two', title: 'I have a popup!', chosen: this.setGroup('two') },
-        { id: 6, label: 'Node 6', group: 'two', title: 'I have a popup!', chosen: this.setGroup('two') },
+        { id: 1, label: 'Node 1', group: 'diamonds', title: 'I have a popup!'},
+        { id: 2, label: 'Node 2', group: 'diamonds', title: 'I have a popup!'},
+        { id: 3, label: 'Node 3', group: 'one', title: 'I have a popup!'},
+        { id: 4, label: 'Node 4', group: 'one', title: 'I have a popup!'},
+        { id: 5, label: 'Node 5', group: 'two', title: 'I have a popup!' },
+        { id: 6, label: 'Node 6', group: 'two', title: 'I have a popup!'},
       ] as any);
       
       edges = new DataSet([
@@ -93,8 +100,8 @@ export class DashboardBackgroundComponent implements AfterViewInit{
         // 修改樣式 this.groupName為當前選的節點的group
         var change = () =>{
             options.groups[this.groupName] =  {
-                color: { background: "red", border: "white" },
-                shape: "diamond",
+                color: { background: this.color, border: "white" },
+                // shape: "diamond",
               }
             network.setOptions(options);
         }
@@ -106,9 +113,36 @@ export class DashboardBackgroundComponent implements AfterViewInit{
             change();
         }}
 
+        var setGroup = (name: string)=>{
+            console.log(name)
+            this.groupName = name;
+        }
+
+        var setColor = (color: string)=>{
+            this.color = color;
+        }
+
         // 內部點擊節點
         network.on( 'click', (properties) => {
             console.log(properties, properties.nodes);
+
+            // cluster
+            var clusterOptions = {
+                joinCondition: function (childOption:any) {
+                    if(properties.nodes[0] === childOption.id){
+                    setGroup(childOption.group);
+                    setColor(childOption.color.background);
+                }
+                  return false;
+                },
+                clusterNodeProperties: {
+                  id: "cidCluster",
+                  borderWidth: 3,
+                  shape: "database",
+                },
+            };
+            network.cluster(clusterOptions);
+
 
             // 模擬api回傳資料，並更新vis
             // network.setData({
@@ -134,4 +168,5 @@ export class DashboardBackgroundComponent implements AfterViewInit{
           });
       }
 }
+
 

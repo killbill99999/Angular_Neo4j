@@ -1,7 +1,14 @@
 
 <div class="background-image">
-    <div id="mynetwork" class="viz-style"></div>
-    <div id="root"></div>
+    <mat-form-field  style="width:240px;">
+        <mat-label>顏色</mat-label>
+        <input matInput [type]="'text'" [(ngModel)]="color">
+    </mat-form-field>
     <div>group: {{groupName}}</div>
     <div id="colorChange" style="cursor:pointer;">change color</div>
+    <div style="position:relative; width: 1000px;
+    height: 800px;">
+        <div id="mynetwork" class="viz-style" ></div>
+    </div>
+    <div id="root"></div>
 </div>

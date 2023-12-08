@@ -7,3 +7,9 @@
     height: 800px;
     border: 1px solid lightgray;
   }
+
+  #custom-menu{
+    height:300px;
+    width:200px;
+    background-color:#666666;
+  }
